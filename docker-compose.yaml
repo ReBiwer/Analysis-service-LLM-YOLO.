@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - '8000:8000'
+    depends_on:
+      postgres:
+        condition: service_started
+
+  postgres:
+    container_name: db_postgres
+    image: postgres:16.1-alpine3.18
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - /var/lib/postgresql/data
+      - .:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+    restart: unless-stopped
