@@ -8,7 +8,7 @@ from app.log_settings import setup_logging
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AbstractAsyncContextManager[None]:
+async def lifespan(app: FastAPI):
     yield
     await app.state.dishka_container.close()
 
