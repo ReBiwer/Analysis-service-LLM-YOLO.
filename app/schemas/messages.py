@@ -4,7 +4,6 @@ from pydantic import BaseModel, ConfigDict
 
 
 class BaseMessage(BaseModel):
-    query: str
 
     model_config = ConfigDict(
         from_attributes=True,
@@ -12,6 +11,7 @@ class BaseMessage(BaseModel):
 
 
 class QueryUser(BaseMessage):
+    query: str
     image_64: str
 
 
@@ -20,6 +20,6 @@ class ResponseLLM(BaseMessage):
     llm_response: str
 
 
-class SchemaLog(ResponseLLM):
+class SchemaLog(QueryUser, ResponseLLM):
     id: int
     created_at: datetime

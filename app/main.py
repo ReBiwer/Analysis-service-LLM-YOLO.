@@ -16,8 +16,8 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="Telegram AI Assistant Backend",
-        description="Backend for handling AI requests from Telegram bot.",
+        title="Yolo service",
+        description="Backend for handling AI requests from Yolo service.",
         lifespan=lifespan,
     )
     app.include_router(yolo.router)
