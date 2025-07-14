@@ -1,0 +1,229 @@
+# Ruff конфигурация для analysis_service
+# FastAPI приложение с SQLAlchemy, Alembic, Dishka и другими зависимостями
+
+# Исключаем часто игнорируемые директории и файлы
+exclude = [
+    ".bzr",
+    ".direnv", 
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pycache__",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "logs",
+    # Исключаем специфичные для проекта файлы
+    "*.pt",  # Модели YOLO
+    "*.png", # Тестовые изображения
+    "*.txt", # Текстовые файлы с данными
+]
+
+# Включаем основные файлы для проверки
+include = [
+    "app/**/*.py",
+    "*.py",
+    "pyproject.toml",
+]
+
+# Используем стиль Black для совместимости
+line-length = 88
+indent-width = 4
+
+# Указываем минимальную версию Python для проекта
+target-version = "py312"
+
+[lint]
+# Включаем расширенный набор правил для качественного кода
+select = [
+    # Pyflakes - базовые ошибки
+    "F",
+    # pycodestyle errors
+    "E",
+    # pycodestyle warnings  
+    "W",
+    # pyupgrade - обновления синтаксиса
+    "UP",
+    # flake8-bugbear - потенциальные баги
+    "B",
+    # flake8-simplify - упрощение кода
+    "SIM",
+    # isort - сортировка импортов
+    "I",
+    # flake8-comprehensions - list/dict comprehensions
+    "C4",
+    # flake8-pie - ненужный код
+    "PIE",
+    # flake8-return - return statements
+    "RET",
+    # flake8-self - использование self
+    "SLF",
+    # flake8-bandit - безопасность (базовые правила)
+    "S101", "S102", "S103", "S104", "S105", "S106", "S107",
+    # flake8-logging-format - правильное логирование
+    "G",
+    # pydocstyle - документация (базовые правила)
+    "D100", "D101", "D102", "D103", "D104", "D105", 
+    # flake8-annotations - аннотации типов
+    "ANN001", "ANN002", "ANN003", "ANN201", "ANN202", "ANN205", "ANN206",
+    # flake8-async - асинхронный код
+    "ASYNC",
+    # tryceratops - обработка исключений
+    "TRY",
+    # flake8-raise - raise statements  
+    "RSE",
+    # flake8-tidy-imports - чистые импорты
+    "TID",
+    # Ruff-specific rules
+    "RUF",
+]
+
+# Игнорируем определенные правила для этого проекта
+ignore = [
+    # Игнорируем слишком длинные строки (используем форматтер)
+    "E501",
+    # Разрешаем assert в тестах
+    "S101",
+    # Разрешаем `print` в некоторых случаях
+    "T201",
+    # Игнорируем missing docstring для __init__.py
+    "D104",
+    # Разрешаем Any в аннотациях типов (для совместимости с библиотеками)
+    "ANN401",
+    # Игнорируем сложность функций (пока)
+    "C901",
+    # Разрешаем магические числа в некоторых случаях
+    "PLR2004",
+    # Игнорируем слишком много аргументов для FastAPI endpoint'ов
+    "PLR0913",
+]
+
+# Разрешаем исправление всех правил при использовании --fix
+fixable = ["ALL"]
+
+# Не исправляем автоматически потенциально опасные правила
+unfixable = [
+    # Не удаляем импорты автоматически
+    "F401",
+    # Не изменяем except без типа
+    "E722", 
+    # Не изменяем логику сравнений
+    "SIM300",
+]
+
+# Исключения для конкретных файлов
+[lint.per-file-ignores]
+# __init__.py файлы часто имеют неиспользуемые импорты
+"__init__.py" = ["F401", "D104"]
+
+# Миграции Alembic - автогенерируемые файлы
+"app/migrations/versions/*.py" = ["ALL"]
+"app/migrations/env.py" = ["E402", "F401"]
+
+# Конфигурационные файлы
+"app/config.py" = ["S105"]  # Разрешаем hardcoded passwords в настройках
+
+# Модели часто имеют много атрибутов
+"app/models/*.py" = ["D101", "RUF012"]
+
+# API эндпоинты могут иметь много параметров
+"app/api/*.py" = ["PLR0913", "ANN201"]
+
+# Тесты (если будут добавлены)
+"tests/**/*.py" = [
+    "S101",    # assert
+    "PLR2004", # магические числа
+    "ANN001",  # аннотации в тестах не обязательны
+    "ANN201",
+    "D100",    # docstring не обязательны в тестах
+    "D101",
+    "D102",
+    "D103",
+]
+
+# Скрипты и утилиты
+"scripts/**/*.py" = ["T201", "S101", "D100"]
+
+# Настройки для конкретных плагинов
+[lint.isort]
+# Группировка импортов
+known-first-party = ["app"]
+# Порядок секций импортов
+section-order = [
+    "future",
+    "standard-library", 
+    "third-party",
+    "first-party",
+    "local-folder"
+]
+# Настройки для совместимости с Black
+combine-as-imports = true
+split-on-trailing-comma = true
+force-single-line = false
+
+[lint.pydocstyle]
+# Используем Google стиль для docstring
+convention = "google"
+
+[lint.flake8-annotations]
+# Не требуем аннотации для self и cls
+mypy-init-return = true
+suppress-dummy-args = true
+
+[lint.flake8-bandit]
+# Список проверок безопасности
+check-typed-exception = true
+
+[lint.flake8-bugbear]
+# Расширенные проверки flake8-bugbear
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.Query", 
+    "fastapi.Path",
+    "fastapi.Body",
+]
+
+[lint.flake8-tidy-imports]
+# Запрещаем относительные импорты
+ban-relative-imports = "all"
+
+# Настройки форматирования
+[format]
+# Используем двойные кавычки как в Black
+quote-style = "double"
+
+# Используем пробелы для отступов
+indent-style = "space"
+
+# Уважаем магические trailing commas
+skip-magic-trailing-comma = false
+
+# Автоматически определяем line ending
+line-ending = "auto"
+
+# Включаем форматирование примеров кода в docstring
+docstring-code-format = true
+
+# Длина строки для кода в docstring
+docstring-code-line-length = "dynamic"
+
+# Убираем лишние скобки
+preview = true 

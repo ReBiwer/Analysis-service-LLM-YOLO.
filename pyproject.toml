@@ -13,6 +13,7 @@ dependencies = [
     "langchain>=0.3.26",
     "langchain-openai>=0.3.27",
     "langgraph>=0.5.2",
+    "ruff>=0.12.3",
     "sqlalchemy>=2.0.41",
     "ultralytics>=8.3.166",
 ]
