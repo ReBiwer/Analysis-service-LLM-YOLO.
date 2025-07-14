@@ -25,7 +25,7 @@ async def analyze_img(
 ) -> ResponseLLM:
     objects = yolo_service.detect_image(query.image_64)
     llm_response = llm_service.get_response(query.query, objects)
-    response = ResponseLLM(query=query.query, detected_objects=objects, llm_response=llm_response)
+    response = ResponseLLM(detected_objects=objects, llm_response=llm_response)
     await log_dao.add(response)
     return response
 
