@@ -1,9 +1,15 @@
 from datetime import datetime
-from sqlalchemy import func, TIMESTAMP
-from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, declared_attr
-from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine, AsyncSession
-from app.config import settings
 
+from sqlalchemy import TIMESTAMP, func
+from sqlalchemy.ext.asyncio import (
+    AsyncAttrs,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
+
+from app.config import settings
 
 engine = create_async_engine(url=settings.db_url)
 async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

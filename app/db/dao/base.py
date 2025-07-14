@@ -1,10 +1,15 @@
 import logging
 from abc import ABC
-from typing import List, TypeVar, Type
+from typing import List, Type, TypeVar
+
 from pydantic import BaseModel
+from sqlalchemy import (
+    delete as sqlalchemy_delete,
+    func,
+    select,
+    update as sqlalchemy_update,
+)
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import select
-from sqlalchemy import update as sqlalchemy_update, delete as sqlalchemy_delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -19,7 +24,7 @@ class BaseDAO[T](ABC):
     Базовый класс (интерфейс) для взаимодействия с данными в БД
     При создании наследника этого класса нужно указать модель данных с которой она будет взаимодействовать
     """
-    model: Type[T] = None
+    model: type[T] = None
 
     def __init__(self, session: AsyncSession):
         self._session = session
@@ -78,7 +83,7 @@ class BaseDAO[T](ABC):
             logger.error(f"Ошибка при добавлении записи: {e}")
             raise
 
-    async def add_many(self, instances: List[BaseModel]):
+    async def add_many(self, instances: list[BaseModel]):
         values_list = [item.model_dump(exclude_unset=True) for item in instances]
         logger.info(f"Добавление нескольких записей {self.model.__name__}. Количество: {len(values_list)}")
         try:
@@ -140,7 +145,7 @@ class BaseDAO[T](ABC):
             logger.error(f"Ошибка при подсчете записей: {e}")
             raise
 
-    async def bulk_update(self, records: List[BaseModel]):
+    async def bulk_update(self, records: list[BaseModel]):
         logger.info(f"Массовое обновление записей {self.model.__name__}")
         try:
             updated_count = 0

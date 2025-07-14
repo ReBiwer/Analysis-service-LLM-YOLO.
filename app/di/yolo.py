@@ -1,4 +1,5 @@
 from logging import Logger
+
 from dishka import Provider, Scope, provide
 
 from app.services.yolo import YOLOService

@@ -1,10 +1,11 @@
 from logging import Logger
+from typing import TypedDict
+
 from httpx import AsyncClient, Client
 from langchain.prompts import PromptTemplate
 from langchain.schema import HumanMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph
-from typing import TypedDict
 
 from app.config import settings
 

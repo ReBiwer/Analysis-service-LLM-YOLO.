@@ -1,9 +1,10 @@
+from contextlib import AbstractAsyncContextManager, asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI
-from contextlib import asynccontextmanager, AbstractAsyncContextManager
 
-from app.di import init_di_web
 from app.api import yolo
+from app.di import init_di_web
 from app.log_settings import setup_logging
 
 

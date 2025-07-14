@@ -1,10 +1,11 @@
 import logging
+
 from sqlalchemy import desc, select
 from sqlalchemy.exc import SQLAlchemyError
 
+from app.config import settings
 from app.db.dao.base import BaseDAO
 from app.models.logs import Log
-from app.config import settings
 
 logger = logging.getLogger(settings.NAME_LOGGER)
 
