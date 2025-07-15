@@ -30,7 +30,8 @@ class LLMService:
         )
         self.prompt = PromptTemplate(
             input_variables=["query", "objects"],
-            template="Ответь на вопрос пользователя {query} касательно этих объектов: {objects}"
+            template="Ответь на вопрос пользователя {query} касательно этих объектов: {objects}."
+                     "Ответ формулируй максимально кратко и лаконично. В 1-2 предложениях"
         )
         workflow = StateGraph(State)
         workflow.add_node("invoke_node", self._invoke_node)

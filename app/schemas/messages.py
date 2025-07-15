@@ -20,6 +20,12 @@ class ResponseLLM(BaseMessage):
     llm_response: str
 
 
-class SchemaLog(QueryUser, ResponseLLM):
+class SchemaLogAdd(BaseMessage):
+    query: str
+    detected_objects: list[str]
+    llm_response: str
+
+
+class SchemaLog(SchemaLogAdd):
     id: int
     created_at: datetime

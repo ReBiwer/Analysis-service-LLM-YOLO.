@@ -4,7 +4,7 @@ from dishka import FromDishka
 from dishka.integrations.fastapi import DishkaRoute
 from fastapi import APIRouter, Query
 
-from app.db.dao.logs import LogDAO
+from app.db.repositories.logs import LogRepository
 from app.schemas.messages import QueryUser, ResponseLLM, SchemaLog
 from app.use_cases.analyze_img import AnalyzeImgUseCase
 
@@ -26,7 +26,7 @@ async def analyze_img(
 
 @router.get('/logs')
 async def get_logs(
-        log_dao: FromDishka[LogDAO],
+        log_dao: FromDishka[LogRepository],
         count_record: Annotated[int, Query()] = 10,
 ) -> list[SchemaLog]:
     records = await log_dao.find_all(count_record)
