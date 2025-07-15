@@ -5,7 +5,7 @@ from app.db.repositories.logs import LogRepository
 from app.domain.repositories.logs import AbstractLogsRepository
 
 
-class LogDAOProvider(Provider):
+class LogsRepoProvider(Provider):
 
     @provide(scope=Scope.REQUEST)
     def get_log_dao(self, session: AsyncSession) -> AbstractLogsRepository:

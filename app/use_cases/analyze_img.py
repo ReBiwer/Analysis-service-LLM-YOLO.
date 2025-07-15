@@ -1,4 +1,4 @@
-from app.domain.entities.logs import Log as LogEntity
+from app.domain.entities.logs import LogEntity as LogEntity
 from app.domain.repositories.logs import AbstractLogsRepository
 from app.schemas.messages import QueryUser, ResponseLLM
 from app.services.llm import LLMService

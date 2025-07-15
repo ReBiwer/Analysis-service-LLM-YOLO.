@@ -1,10 +1,11 @@
-from typing import Annotated
+from typing import Annotated, Sequence
 
 from dishka import FromDishka
 from dishka.integrations.fastapi import DishkaRoute
 from fastapi import APIRouter, Query
 
-from app.db.repositories.logs import LogRepository
+from app.domain.repositories.logs import AbstractLogsRepository
+from app.domain.entities.logs import LogInfo
 from app.schemas.messages import QueryUser, ResponseLLM, SchemaLog
 from app.use_cases.analyze_img import AnalyzeImgUseCase
 
@@ -26,9 +27,8 @@ async def analyze_img(
 
 @router.get('/logs')
 async def get_logs(
-        log_dao: FromDishka[LogRepository],
+        log_repo: FromDishka[AbstractLogsRepository],
         count_record: Annotated[int, Query()] = 10,
-) -> list[SchemaLog]:
-    records = await log_dao.find_all(count_record)
-    results = [SchemaLog.model_validate(record) for record in records]
-    return results
+) -> Sequence[LogInfo]:
+    records = await log_repo.find_all(count_record)
+    return records
