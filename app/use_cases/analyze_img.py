@@ -10,11 +10,11 @@ class AnalyzeImgUseCase:
         self,
         yolo_service: YOLOService,
         llm_service: LLMService,
-        dao: AbstractLogsRepository,
+        repo: AbstractLogsRepository,
     ):
         self.yolo_service = yolo_service
         self.llm_service = llm_service
-        self.dao = dao
+        self.repo = repo
 
     async def analyze(self, query: QueryUser) -> ResponseLLM:
         objects = self.yolo_service.detect_image(query.image_64)
@@ -25,7 +25,7 @@ class AnalyzeImgUseCase:
             detected_objects=objects,
             llm_response=llm_response_text,
         )
-        await self.dao.add(log_entry)
+        await self.repo.add(log_entry)
 
         return ResponseLLM(
             detected_objects=objects, llm_response=llm_response_text

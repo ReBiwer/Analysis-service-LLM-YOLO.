@@ -16,5 +16,5 @@ class AnalyzeImgUCProvider(Provider):
         dao: AbstractLogsRepository,
     ) -> AnalyzeImgUseCase:
         return AnalyzeImgUseCase(
-            llm_service=llm_service, yolo_service=yolo_service, dao=dao
+            llm_service=llm_service, yolo_service=yolo_service, repo=dao
         )
