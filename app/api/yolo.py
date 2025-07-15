@@ -6,8 +6,7 @@ from fastapi import APIRouter, Query
 
 from app.db.dao.logs import LogDAO
 from app.schemas.messages import QueryUser, ResponseLLM, SchemaLog
-from app.services.llm import LLMService
-from app.services.yolo import YOLOService
+from app.use_cases.analyze_img import AnalyzeImgUseCase
 
 router = APIRouter(
     tags=["yolo-analyze"],
@@ -19,14 +18,9 @@ router = APIRouter(
 @router.post('/analyze')
 async def analyze_img(
         query: QueryUser,
-        yolo_service: FromDishka[YOLOService],
-        llm_service: FromDishka[LLMService],
-        log_dao: FromDishka[LogDAO],
+        use_cases: FromDishka[AnalyzeImgUseCase],
 ) -> ResponseLLM:
-    objects = yolo_service.detect_image(query.image_64)
-    llm_response = llm_service.get_response(query.query, objects)
-    response = ResponseLLM(detected_objects=objects, llm_response=llm_response)
-    await log_dao.add(response)
+    response = await use_cases.analyze(query)
     return response
 
 
