@@ -1,12 +1,13 @@
-from typing import Annotated, Sequence
+from collections.abc import Sequence
+from typing import Annotated
 
 from dishka import FromDishka
 from dishka.integrations.fastapi import DishkaRoute
 from fastapi import APIRouter, Query
 
-from app.domain.repositories.logs import AbstractLogsRepository
 from app.domain.entities.logs import LogInfo
-from app.schemas.messages import QueryUser, ResponseLLM, SchemaLog
+from app.domain.repositories.logs import AbstractLogsRepository
+from app.schemas.messages import QueryUser, ResponseLLM
 from app.use_cases.analyze_img import AnalyzeImgUseCase
 
 router = APIRouter(

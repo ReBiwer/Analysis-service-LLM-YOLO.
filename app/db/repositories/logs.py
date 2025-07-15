@@ -1,5 +1,5 @@
 import logging
-from typing import Sequence
+from collections.abc import Sequence
 
 from sqlalchemy import desc, insert, select
 from sqlalchemy.exc import SQLAlchemyError
