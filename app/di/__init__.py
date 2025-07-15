@@ -7,6 +7,7 @@ from app.di.llm import LLMServiceProvider
 from app.di.logger_di import LoggerProvider
 from app.di.logs_dao import LogDAOProvider
 from app.di.yolo import YOLOServiceProvider
+from app.di.use_cases import AnalyzeImgUCProvider
 
 
 def init_di_web(app: FastAPI) -> None:
@@ -21,4 +22,5 @@ def container_factory() -> AsyncContainer:
         LoggerProvider(),
         LLMServiceProvider(),
         YOLOServiceProvider(),
+        AnalyzeImgUCProvider(),
     )
